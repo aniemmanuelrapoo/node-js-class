@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "nodemon": "^2.0.14"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "class",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aniemmanuelrapoo/node-js-class.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aniemmanuelrapoo/node-js-class/issues"
+  },
+  "homepage": "https://github.com/aniemmanuelrapoo/node-js-class#readme",
+  "description": ""
+}
