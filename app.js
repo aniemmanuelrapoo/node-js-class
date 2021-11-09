@@ -32,12 +32,15 @@ app.set('view engine', 'ejs');
 //middleware and static files eg, css images that will be public
 app.use(express.static('public'));
 
+//for accepting form data = help get the title snippet and body in create file and put it in an object that we can use it easily
+app.use(express.urlencoded({ extended: true }));
+
 //morgan a third party middleware
 app.use(morgan('dev'));
 
 //mongoose and mongo sandbox routes
 
-//save the blog = blog.save(), find all the blogs = Blog.find(), find single blog based on id = Blog.findById('61888b371cd9364c941de695')
+//save the blog = blog.save(), find all the blogs = Blog.find(), find single blog based on id = Blog.findById('61888b371cd9364c941de695'), delete a blog = Blog.findByIdAndDelete(id). NOTE: they are acny .then .catch
 
 //routes
 app.get('/', (req, res) => {
@@ -57,6 +60,45 @@ app.get('/blogs', (req, res) => {
         .catch((err) => {
             console.log(err)
         })
+});
+
+app.post('/blogs', (req, res) => {
+    const blog = new Blog(req.body);
+
+    blog.save()
+        .then((result) => {
+            res.redirect('/blogs');
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+});
+
+app.get('/blogs/create', (req, res) => {
+    res.render('create', {title: 'Create'})
+})
+
+app.get('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findById(id)
+        .then((result) => {
+            res.render('details', { blog: result, title: 'Blog Details' })
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+});
+
+app.delete('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+
+    Blog.findByIdAndDelete(id)
+        .then((result) => {
+            res.json({ redirect: '/blogs' })
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 
 //redirect
@@ -64,13 +106,15 @@ app.get('/blogs', (req, res) => {
 //     res.redirect('/about')
 // })
 
-app.get('/blogs/create', (req, res) => {
-    res.render('create', {title: 'Create'})
-})
-
 //404 Page
 // express runs code top to bottom. position is important
 // this code should stay at the bottom
 app.use((req, res) => {
     res.status(404).render('404', {title: '404'})
 })
+
+// REQUEST TYPES
+//GET requests to get a resource
+//POST requests to create new data (eg a new blog)
+//DELETE requests to delete data(eg. delete a blog)
+//PUT request to update data (eg. update a blog)
